@@ -1,0 +1,336 @@
+--[[
+	Script: gDuel-System
+	Version: 0.2
+	Created by DidVaitel
+]]
+
+function sendMessageToPlayer(ply, str)
+	net.Start("gDuel.SendMessage")
+	net.WriteString(str)
+	net.Send(ply)
+end
+
+gDuel.Duels = gDuel.Duels or {}
+if file.Exists("gduel/arenas.txt","DATA") then
+	local t = util.JSONToTable( file.Read( "gduel/arenas.txt", "DATA" ) )
+	gDuel.Arenas = t
+end
+
+local function SendRequest(len, ply)
+	local enemy = net.ReadEntity()
+	local amt = tonumber(net.ReadInt(32))
+	local types = tonumber(net.ReadInt(16))
+
+	if !enemy or !IsValid(enemy) then return end
+	if !amt then return end
+	if !types or types and types == 0 or types and types > #gDuel.Types then return end
+
+	if gDuel.Arenas[game.GetMap()] and table.IsEmpty(gDuel.Arenas[game.GetMap()]) or table.IsEmpty(gDuel.Arenas) then
+		sendMessageToPlayer(ply, gDuel.Translate("PointNotFound"))
+		return
+	end
+
+	if !table.IsEmpty(DarkRP) then
+		if amt < gDuel.minBet then
+			sendMessageToPlayer(ply, gDuel.Translate("Small amount"))
+			return
+		end
+
+		if amt > gDuel.maxBet then
+			sendMessageToPlayer(ply, gDuel.Translate("Big amount"))
+			return
+		end
+
+	
+		if !ply:canAfford(amt) then
+			sendMessageToPlayer(ply, gDuel.Translate("CantAfford"))
+			return
+		end
+
+		if !enemy:canAfford(amt) then
+			sendMessageToPlayer(ply, gDuel.Translate("CantAffordEnemy"))
+			return
+		end
+	end
+
+	for k,v in pairs(gDuel.Duels) do
+		if v.enemy == enemy and v.ply == ply then
+			sendMessageToPlayer(ply, gDuel.Translate("AlreadySended"))
+			return
+		end
+	end
+
+	local id = math.random(0,9999)
+	gDuel.Duels[ id ] = { ply = ply, enemy = enemy, amt = amt, types = types }
+
+	net.Start("gDuel.SendRequest")
+		net.WriteEntity(ply)
+		net.WriteInt(amt, 32)
+		net.WriteInt(types, 16)
+		net.WriteInt(id,16)
+	net.Send(enemy)
+	
+end
+net.Receive("gDuel.SendRequest", SendRequest)
+
+local function DeclineRequest(len,ply)
+	local id = net.ReadInt(16)
+
+	if gDuel.Duels[ id ] == nil or gDuel.Duels[ id ] != nil and !table.HasValue( gDuel.Duels[ id ], ply ) then
+		ply:Kick("Exploiting![gDuels]")
+	end
+	sendMessageToPlayer(ply, gDuel.Translate("Declined"))
+	sendMessageToPlayer(gDuel.Duels[ id ].ply, gDuel.Translate("DeclinedEnemy"))
+	gDuel.Duels[id] = nil
+end
+net.Receive("gDuel.DeclineRequest", DeclineRequest)
+
+local function AcceptedRequest(len, ply)
+	local id = net.ReadInt(16)
+	local ply2 = gDuel.Duels[ id ].ply
+
+	if !table.IsEmpty(DarkRP) then
+		if !ply2:canAfford(gDuel.Duels[ id ].amt) then
+			sendMessageToPlayer(ply, gDuel.Translate("CantAffordEnemy"))
+			gDuel.Duels[id] = nil
+			return
+		end
+
+		if !ply:canAfford(gDuel.Duels[ id ].amt) then
+			sendMessageToPlayer(ply, gDuel.Translate("CantAfford"))
+			gDuel.Duels[id] = nil
+			return
+		end
+
+		ply:addMoney(-gDuel.Duels[ id ].amt)
+		ply2:addMoney(-gDuel.Duels[ id ].amt)
+	end
+
+	if !ply:Alive() then
+		ply:Spawn()
+	elseif !ply2:Alive() then
+		ply2:Spawn()
+	end
+
+	ply:SetHealth(100)
+	ply2:SetHealth(100)
+
+	if gDuel.Arenas[game.GetMap()] and table.IsEmpty(gDuel.Arenas[game.GetMap()]) or table.IsEmpty(gDuel.Arenas) then
+		sendMessageToPlayer(ply, gDuel.Translate("PointNotFound"))
+		return
+	end
+
+	local map = gDuel.Arenas[game.GetMap()]
+	for k,v in pairs(gDuel.Arenas[game.GetMap()]) do
+		if v.available == true then
+			posit = map[k]
+			break
+		end
+	end
+
+	ply.LastPos = ply:GetPos()
+
+	ply:SetPos(posit.pos1)
+
+	ply2.LastPos = ply2:GetPos()
+
+	ply2:SetPos(posit.pos2)
+
+	ply2:SetEyeAngles(Angle(0,90,0))
+	ply:SetEyeAngles(Angle(0,-90,0))
+
+	posit.available = false
+	ply.weaponslistduel = {}
+	ply2.weaponslistduel = {}
+	for k,v in pairs(ply:GetWeapons()) do
+		table.insert(ply.weaponslistduel, v:GetClass())
+	end
+	for k,v in pairs(ply2:GetWeapons()) do
+		table.insert(ply2.weaponslistduel, v:GetClass())
+	end
+	ply:StripWeapons()
+	ply2:StripWeapons()
+
+	if gDuel.Types[ gDuel.Duels[ id ].types ].onSpawn != nil then
+		gDuel.Types[ gDuel.Duels[ id ].types ].onSpawn(ply)
+		gDuel.Types[ gDuel.Duels[ id ].types ].onSpawn(ply2)
+	end
+
+	ply:Give(gDuel.Types[ gDuel.Duels[ id ].types ].weapon)
+
+	ply2:Give(gDuel.Types[ gDuel.Duels[ id ].types ].weapon)
+
+	ply:Freeze(true)
+	ply2:Freeze(true)
+
+	timer.Create("BeforeMatch",5,1,function()
+		if ply:IsValid() then
+			ply:Freeze(false)
+		end
+		if ply2:IsValid() then
+			ply2:Freeze(false)
+		end
+	end)
+
+	net.Start("gDuel.Animation")
+	net.Send(ply)
+
+	net.Start("gDuel.Animation")
+	net.Send(ply2)
+
+
+	ply.Opponent = ply2
+	ply2.Opponent = ply
+	local random = math.random(0,99999999)
+	timer.Create(random.."_GduelsTimer",1,0,function()
+		if ply2.Opponent == nil or ply.Opponent == nil then
+			gDuel.Duels[id] = nil
+			if ply.HaveDuel == true then
+				ply.HaveDuel = false
+			elseif ply2.HaveDuel == true  then
+				ply2.HaveDuel = false
+			end
+			if ply.deathduel == true then
+				ply:Spawn()
+	    		for k,v in pairs(ply.weaponslistduel) do
+	    			ply:Give(v)
+	    		end
+			elseif ply2.deathduel == true then
+				ply2:Spawn()
+	    		for k,v in pairs(ply2.weaponslistduel) do
+	    			ply2:Give(v)
+	    		end
+			end
+
+			timer.Remove(random.."_GduelsTimer")
+		end
+	end)
+
+end
+net.Receive("gDuel.AcceptRequest", AcceptedRequest)
+hook.Add("PlayerDeath", "DuelsCheckDeath", function(victim, pric, attacker)
+	if victim.Opponent != nil then
+		for k,v in pairs(gDuel.Duels) do
+			if v.ply == victim.Opponent or v.enemy == victim.Opponent then
+				if !table.IsEmpty(DarkRP) then
+					local balance = v.amt
+					victim.Opponent:addMoney(balance*2)
+				end
+				victim.Opponent:SetPos(victim.Opponent.LastPos)
+				victim.Opponent:SetHealth(victim.Opponent:GetMaxHealth())
+				sendMessageToPlayer(victim, gDuel.Translate("YouLose!"))
+				sendMessageToPlayer(victim.Opponent, gDuel.Translate("Youwin!"))
+				victim.Opponent:StripWeapons()
+
+    			for k,v in pairs(victim.Opponent.weaponslistduel) do
+    				victim.Opponent:Give(v)
+    			end
+    			victim.Opponent:SelectWeapon("weapon_physgun")
+    			victim.Opponent:SetHealth(victim.Opponent:GetMaxHealth())
+   				gDuel.SaveWin(victim.Opponent)
+   				gDuel.SaveLose(victim)
+    			victim.Opponent.Opponent = nil
+				victim.Opponent = nil
+				victim.deathduel = true
+			end
+		end
+	end
+end)
+
+
+local function BlockSuicide(ply)
+    if ply.Opponent != nil then
+    	return false
+    end
+    return true
+end
+hook.Add( "CanPlayerSuicide", "BlockSuicide", BlockSuicide )
+
+hook.Add("PlayerDisconnected", "gDuels.OnPlayerDisconnected", function(ply)
+	if ply.Opponent != nil then
+		for k,v in pairs(gDuel.Duels) do
+			if v.ply == ply.Opponent or v.enemy == ply.Opponent then
+				if !table.IsEmpty(DarkRP) then
+					local balance = v.amt
+					ply.Opponent:addMoney(balance*2)
+				end
+				ply.Opponent:SetPos(ply.Opponent.LastPos)
+				ply.Opponent:SetHealth(ply.Opponent:GetMaxHealth())
+				sendMessageToPlayer(ply.Opponent, gDuel.Translate("Youwin!"))
+				ply.Opponent:StripWeapons()
+    			for k,v in pairs(ply.Opponent.weaponslistduel) do
+    				ply.Opponent:Give(v)
+    			end
+    			ply.Opponent:SelectWeapon("weapon_physgun")
+    			ply.Opponent:SetHealth(ply.Opponent:GetMaxHealth())
+    			gDuel.SaveLose(ply)
+				gDuel.SaveWin(ply.Opponent)
+    			ply.Opponent.Opponent = nil
+
+			end
+		end
+	end
+end)
+
+
+hook.Add( "playerCanChangeTeam", "gDuels.CanChange", function( ply,  team,  force)
+    if ply.Opponent != nil then
+    	return false, gDuel.Translate("OnTheDuel")
+    end
+end)
+
+hook.Add("PlayerSpawnProp", "gDuel.AntiProp", function( ply, model )
+	if ply.Opponent != nil then
+		return false
+	end
+	return true
+end)
+
+
+function gDuel.SaveWin(ply)
+	MySQLite.query("SELECT * FROM gduels_infos WHERE steamID = ".. MySQLite.SQLStr(ply:SteamID())..";", function(b)
+		local r=b[1]
+		local duels = r.Duels + 1
+		local wins = r.Duelswin + 1
+
+		MySQLite.query([[REPLACE INTO gduels_infos VALUES(]].. MySQLite.SQLStr(ply:SteamID()) ..[[,]].. MySQLite.SQLStr(ply:Nick())..[[,]].. duels ..[[,]].. wins..[[,]].. r.Duelslose..[[ );]])
+	end)
+end
+
+function gDuel.SaveLose(ply)
+	MySQLite.query("SELECT * FROM gduels_infos WHERE steamID = ".. MySQLite.SQLStr(ply:SteamID())..";", function(b)
+		local r=b[1]
+		local duels = r.Duels + 1
+		local wins = r.Duelswin
+		local loses = r.Duelslose + 1
+		MySQLite.query([[REPLACE INTO gduels_infos VALUES(]].. MySQLite.SQLStr(ply:SteamID()) ..[[,]].. MySQLite.SQLStr(ply:Nick())..[[,]].. duels ..[[,]].. wins..[[,]].. loses..[[);]])
+	end)
+end
+
+
+local function DarkRPInit()
+	MySQLite.query([[CREATE TABLE IF NOT EXISTS gduels_infos(steamID VARCHAR(20) NOT NULL PRIMARY KEY, Name VARCHAR(32) NOT NULL, Duels int NOT NULL, Duelswin int NOT NULL, Duelslose int NOT NULL);]])
+end
+hook.Add("DatabaseInitialized", "gDuels.DataBase", DarkRPInit)
+
+function gDuel.Getdata(ply, callback)
+	MySQLite.query("SELECT * FROM gduels_infos WHERE steamID = ".. MySQLite.SQLStr(ply:SteamID())..";", function(r) callback(r) end)
+end
+
+function gDuel.GetdataAll(callback)
+	MySQLite.query("SELECT * FROM gduels_infos;", function(r) callback(r) end)
+end
+
+
+function gDuel.CreateData(pl)
+	MySQLite.query([[REPLACE INTO gduels_infos VALUES(]].. MySQLite.SQLStr(pl:SteamID()) ..[[,]].. MySQLite.SQLStr(pl:Nick())..[[,0,0,0 );]])
+end
+
+hook.Add("PlayerAuthed", "gDuels.LeadersTable", function(pl)
+	gDuel.Getdata(pl, function(data)
+		local datas = data and data[1] or {}
+		//PrintTable(datas)
+		if not data then gDuel.CreateData(pl) end
+	end)
+end)
+
