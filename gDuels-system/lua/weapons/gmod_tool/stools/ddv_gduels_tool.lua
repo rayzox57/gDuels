@@ -1,52 +1,67 @@
 --[[
-	Script: gDuel-System
-	Version: 0.2
-	Created by DidVaitel
+	Created by DidVaitel (http://steamcommunity.com/profiles/76561198108670811)
 ]]
 
-TOOL.Category           = "gDuel-sys"
-TOOL.Name               = gDuel.Translate("DuelToolNameGlobal")
-TOOL.Command            = nil
+TOOL.Category		= "DidVaitel Tools"
+TOOL.Name			= "gDuels Arena Creator"
+
+if CLIENT then
+	language.Add( "Tool.ddv_gduels_tool.name", gDuel.Translate("DuelToolName") );
+	language.Add( "Tool.ddv_gduels_tool.desc", gDuel.Translate("DuelToolDesc") );
+	language.Add( "Tool.ddv_gduels_tool.0", gDuel.Translate("DuelTool0") );
+end;
+
+
 TOOL.CurArena           = 1
-TOOL.Setuped 			= false
 TOOL.PointsToDraw   	= {}
-if SERVER then
-	function TOOL:LeftClick(trace)
-		if !self:GetOwner():IsSuperAdmin() then
+
+function TOOL:LeftClick( Trace )
+
+	if SERVER then
+		if (!self:GetOwner():IsSuperAdmin()) then
 			sendMessageToPlayer(self:GetOwner(), gDuel.Translate("YouDontHaveRights!"))	
 			return
 		end
-	    if(gDuel.Arenas[game.GetMap()][self.CurArena] == nil) and self.Setuped == false then
+
+	    if (!gDuel.Arenas[game.GetMap()][self.CurArena] or !gDuel.Arenas[game.GetMap()][self.CurArena].pos1) then
+
 	        gDuel.Arenas[game.GetMap()][self.CurArena] = {}
-	        gDuel.Arenas[game.GetMap()][self.CurArena].pos1 = trace.HitPos
+	        gDuel.Arenas[game.GetMap()][self.CurArena].pos1 = Trace.HitPos
 	        sendMessageToPlayer(self:GetOwner(), gDuel.Translate("FirstPoint"))
-	        self.Setuped = true
 
 	        local pointsToDraw = {}
 	    	for k, v in pairs(gDuel.Arenas[game.GetMap()]) do
 	    		table.insert(pointsToDraw, v.pos1)
 	    		table.insert(pointsToDraw, v.pos2)
 			end
+
 	    	net.Start("gDuel.UpdatePointsToDraw")
 	    		net.WriteTable(pointsToDraw)
 	    	net.Send(self:GetOwner())
-	    elseif self.Setuped == true then
+
+	    elseif (gDuel.Arenas[game.GetMap()][self.CurArena].pos1) then
 	    	sendMessageToPlayer(self:GetOwner(), gDuel.Translate("DuelToolSetFirstPointalready"))
-	    elseif (gDuel.Arenas[game.GetMap()][self.CurArena] != nil) and self.Setuped == false then
-	    	sendMessageToPlayer(self:GetOwner(), gDuel.Translate("RemoveAllPoints"))
 	    end
-	    return true
 	end
 
-	function TOOL:RightClick(trace)
-		if !self:GetOwner():IsSuperAdmin() then
+    return true
+
+end
+
+function TOOL:RightClick( Trace )
+
+	if SERVER then
+
+		if (!self:GetOwner():IsSuperAdmin()) then
 			sendMessageToPlayer(self:GetOwner(), gDuel.Translate("YouDontHaveRights!"))	
 			return
 		end
-	    if self.Setuped == true then
-	        gDuel.Arenas[game.GetMap()][self.CurArena].pos2 = trace.HitPos 
+
+	    if (gDuel.Arenas[game.GetMap()][self.CurArena] and !gDuel.Arenas[game.GetMap()][self.CurArena].pos2 and gDuel.Arenas[game.GetMap()][self.CurArena].pos1) then
+
+	        gDuel.Arenas[game.GetMap()][self.CurArena].pos2 = Trace.HitPos 
 	        gDuel.Arenas[game.GetMap()][self.CurArena].available = true
-	        self.Setuped = false
+
 	        self.CurArena = self.CurArena + 1
 	        
 	    	local pointsToDraw = {}
@@ -54,34 +69,46 @@ if SERVER then
 	    		table.insert(pointsToDraw, v.pos1)
 	    		table.insert(pointsToDraw, v.pos2)
 			end
+
 	    	net.Start("gDuel.UpdatePointsToDraw")
 	    		net.WriteTable(pointsToDraw)
 	    	net.Send(self:GetOwner())
+
 	    	sendMessageToPlayer(self:GetOwner(), gDuel.Translate("SecondPoint"))
-		    local t = util.TableToJSON(gDuel.Arenas)
-		    file.CreateDir("gduel")
-		    file.Write("gduel/arenas.txt", t)
-	    else
+
+			if (!file.Exists("didvaitel", "DATA")) then
+				file.CreateDir("didvaitel")
+			end
+
+			if (!file.Exists("didvaitel/gduels", "DATA")) then
+				file.CreateDir("didvaitel/gduels")
+			end
+
+		    file.Write("didvaitel/gduels/arenas.txt", util.TableToJSON(gDuel.Arenas))
+	    elseif (!gDuel.Arenas[game.GetMap()][self.CurArena] or !gDuel.Arenas[game.GetMap()][self.CurArena].pos1) then
 	        sendMessageToPlayer(self:GetOwner(), gDuel.Translate("DuelToolSetFirstPoint"))
 	    end
-	    return true
+
 	end
+
+    return true
 end
 
+
 function TOOL:Reload()
+
 	if !self:GetOwner():IsSuperAdmin() then
 		if SERVER then
 			sendMessageToPlayer(self:GetOwner(), gDuel.Translate("YouDontHaveRights!"))	
 		end		
 		return
 	end
+
 	self.CurArena = 1
-	self.Setuped = false
 	self.PointsToDraw = {}
-	gDuel.Arenas = {}
 	gDuel.Arenas[game.GetMap()] = {}
+
 	if SERVER then
-		gDuel.Arenas = {}
 		sendMessageToPlayer(self:GetOwner(), gDuel.Translate("PointsCleared"))
 	end
 end
@@ -93,10 +120,11 @@ function TOOL:Deploy()
 		end		
 		return
 	end
-	if(gDuel.Arenas == nil) then
+
+	if (gDuel.Arenas == nil) then
 		gDuel.Arenas = {}
 	end
-	if(gDuel.Arenas[game.GetMap()] == nil or gDuel.Arenas[game.GetMap()] == {}) then
+	if (gDuel.Arenas[game.GetMap()] == nil or gDuel.Arenas[game.GetMap()] == {}) then
 	    gDuel.Arenas[game.GetMap()] = {}
 	    gDuel.Arenas[game.GetMap()][self.CurArena] = {}
 	end
@@ -118,10 +146,4 @@ function TOOL:DrawHUD()
 	end
 
 
-end
-
-if CLIENT then
-    language.Add("Tool.duelpoints.name", gDuel.Translate("DuelToolName"))
-    language.Add("Tool.duelpoints.desc", gDuel.Translate("DuelToolDesc"))
-    language.Add("Tool.duelpoints.0", gDuel.Translate("DuelTool0"))
 end

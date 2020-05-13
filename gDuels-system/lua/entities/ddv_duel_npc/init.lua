@@ -1,8 +1,7 @@
 --[[
-	Script: gDuel-System
-	Version: 0.2
-	Created by DidVaitel
+	Created by DidVaitel (http://steamcommunity.com/profiles/76561198108670811)
 ]]
+
 
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
