@@ -1,7 +1,5 @@
 --[[
-	Script: gDuel-System
-	Version: 0.2
-	Created by DidVaitel
+	Created by DidVaitel (http://steamcommunity.com/profiles/76561198108670811)
 ]]
 
 function sendMessageToPlayer(ply, str)
@@ -10,11 +8,9 @@ function sendMessageToPlayer(ply, str)
 	net.Send(ply)
 end
 
+
 gDuel.Duels = gDuel.Duels or {}
-if file.Exists("gduel/arenas.txt","DATA") then
-	local t = util.JSONToTable( file.Read( "gduel/arenas.txt", "DATA" ) )
-	gDuel.Arenas = t
-end
+gDuel.Arenas = gDuel.Arenas or {}
 
 local function SendRequest(len, ply)
 	local enemy = net.ReadEntity()
@@ -286,50 +282,86 @@ hook.Add("PlayerSpawnProp", "gDuel.AntiProp", function( ply, model )
 	return true
 end)
 
+hook.Add( "InitPostEntity", "gDuel.LoadArenas", function()
+
+	gDuel.LoadArenas()
+
+end )
+
+function gDuel.LoadArenas()
+
+	if (!file.Exists("didvaitel", "DATA")) then
+		file.CreateDir("didvaitel")
+	end
+
+	if (!file.Exists("didvaitel/gduels", "DATA")) then
+		file.CreateDir("didvaitel/gduels")
+	end
+
+	if file.Exists("didvaitel/gduels/arenas.txt","DATA") then
+
+		local t = util.JSONToTable( file.Read( "didvaitel/gduels/arenas.txt", "DATA" ) )
+		gDuel.Arenas = t
+
+		if (!gDuel.Arenas[game.GetMap()]) then
+			gDuel.Arenas[game.GetMap()] = {}
+		end
+
+		for k,v in pairs(gDuel.Arenas[game.GetMap()]) do
+			if (v.pos1 and v.pos2 and v.available) then
+				continue
+			else
+				v = {}
+			end
+		end
+
+	end
+
+end
 
 function gDuel.SaveWin(ply)
-	MySQLite.query("SELECT * FROM gduels_infos WHERE steamID = ".. MySQLite.SQLStr(ply:SteamID())..";", function(b)
-		local r=b[1]
-		local duels = r.Duels + 1
-		local wins = r.Duelswin + 1
+	local data = sql.Query("SELECT * FROM gduels_infos WHERE steamID = ".. sql.SQLStr(ply:SteamID())..";")
+	local r=data[1]
+	local duels = r.Duels + 1
+	local wins = r.Duelswin + 1
 
-		MySQLite.query([[REPLACE INTO gduels_infos VALUES(]].. MySQLite.SQLStr(ply:SteamID()) ..[[,]].. MySQLite.SQLStr(ply:Nick())..[[,]].. duels ..[[,]].. wins..[[,]].. r.Duelslose..[[ );]])
-	end)
+	sql.Query([[REPLACE INTO gduels_infos VALUES(]].. sql.SQLStr(ply:SteamID()) ..[[,]].. sql.SQLStr(ply:Nick())..[[,]].. duels ..[[,]].. wins..[[,]].. r.Duelslose..[[ );]])
 end
 
 function gDuel.SaveLose(ply)
-	MySQLite.query("SELECT * FROM gduels_infos WHERE steamID = ".. MySQLite.SQLStr(ply:SteamID())..";", function(b)
-		local r=b[1]
-		local duels = r.Duels + 1
-		local wins = r.Duelswin
-		local loses = r.Duelslose + 1
-		MySQLite.query([[REPLACE INTO gduels_infos VALUES(]].. MySQLite.SQLStr(ply:SteamID()) ..[[,]].. MySQLite.SQLStr(ply:Nick())..[[,]].. duels ..[[,]].. wins..[[,]].. loses..[[);]])
-	end)
+	local data = sql.Query("SELECT * FROM gduels_infos WHERE steamID = ".. sql.SQLStr(ply:SteamID())..";")
+	local r=data[1]
+	local duels = r.Duels + 1
+	local wins = r.Duelswin
+	local loses = r.Duelslose + 1
+	
+	sql.Query([[REPLACE INTO gduels_infos VALUES(]].. sql.SQLStr(ply:SteamID()) ..[[,]].. sql.SQLStr(ply:Nick())..[[,]].. duels ..[[,]].. wins..[[,]].. loses..[[);]])
 end
 
 
 local function DarkRPInit()
-	MySQLite.query([[CREATE TABLE IF NOT EXISTS gduels_infos(steamID VARCHAR(20) NOT NULL PRIMARY KEY, Name VARCHAR(32) NOT NULL, Duels int NOT NULL, Duelswin int NOT NULL, Duelslose int NOT NULL);]])
+	sql.Query("CREATE TABLE IF NOT EXISTS gduels_infos(steamID VARCHAR(20) NOT NULL PRIMARY KEY, Name VARCHAR(32) NOT NULL, Duels int NOT NULL, Duelswin int NOT NULL, Duelslose int NOT NULL);")
 end
-hook.Add("DatabaseInitialized", "gDuels.DataBase", DarkRPInit)
+hook.Add("InitPostEntity", "gDuels.DataBase", DarkRPInit)
 
 function gDuel.Getdata(ply, callback)
-	MySQLite.query("SELECT * FROM gduels_infos WHERE steamID = ".. MySQLite.SQLStr(ply:SteamID())..";", function(r) callback(r) end)
+	local data = sql.Query("SELECT * FROM gduels_infos WHERE steamID = ".. sql.SQLStr(ply:SteamID())..";")
+	callback(data)
 end
 
 function gDuel.GetdataAll(callback)
-	MySQLite.query("SELECT * FROM gduels_infos;", function(r) callback(r) end)
+	local data = sql.Query("SELECT * FROM gduels_infos;")
+	callback(data)
 end
-
 
 function gDuel.CreateData(pl)
-	MySQLite.query([[REPLACE INTO gduels_infos VALUES(]].. MySQLite.SQLStr(pl:SteamID()) ..[[,]].. MySQLite.SQLStr(pl:Nick())..[[,0,0,0 );]])
+	sql.Query([[REPLACE INTO gduels_infos VALUES(]].. sql.SQLStr(pl:SteamID()) ..[[,]].. sql.SQLStr(pl:Nick())..[[,0,0,0 );]])
 end
+
 
 hook.Add("PlayerAuthed", "gDuels.LeadersTable", function(pl)
 	gDuel.Getdata(pl, function(data)
 		local datas = data and data[1] or {}
-		//PrintTable(datas)
 		if not data then gDuel.CreateData(pl) end
 	end)
 end)

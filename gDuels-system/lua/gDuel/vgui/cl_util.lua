@@ -1,8 +1,7 @@
 --[[
-      Script: gDuel-System
-      Version: 0.2
-      Created by DidVaitel
+	Created by DidVaitel (http://steamcommunity.com/profiles/76561198108670811)
 ]]
+
 gDuel.vgui = gDuel.vgui or {}
 
 surface.CreateFont( 'gDuelFont100', {
@@ -37,7 +36,7 @@ surface.CreateFont( 'gDuelFont14', {
 
 // Our functions
 local blur = Material 'pp/blurscreen'
-local Linecolor = Color(221,39,39)
+local Linecolor = Color(255, 255, 255, 100)
 // Blur
 function gDuel.vgui.DrawBlur( pan, amt )
 

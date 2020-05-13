@@ -1,7 +1,5 @@
 --[[
-	Script: gDuel-System
-	Version: 0.2
-	Created by DidVaitel
+	Created by DidVaitel (http://steamcommunity.com/profiles/76561198108670811)
 ]]
 
 gDuel.maxBet 		= 1000000 -- max bet [DARKRP ONLY]

@@ -1,8 +1,7 @@
 --[[
-	Script: gDuel-System
-	Version: 0.2
-	Created by DidVaitel
+      Created by DidVaitel (http://steamcommunity.com/profiles/76561198108670811)
 ]]
+
 gDuel.vgui = gDuel.vgui or {}
 local function gDuelMenu()
 	local w, h = ScrW() * .7, ScrH() * .7
@@ -61,7 +60,7 @@ local function gDuelMenu()
 	          end
 	    end
 	    btn.Paint = function(self,w,h)
-	          gDuel.vgui.DrawBox(0, 0, w , h, Color(167, 48, 48, 100))
+	          gDuel.vgui.DrawBox(0, 0, w , h, Color(10, 189, 227, 100))
 	          gDuel.vgui.DrawOutlinedBox( 0, 0,w, h )          
 	    end
 
@@ -255,7 +254,7 @@ local function gDuelMenu()
       end
       MainButton.Paint = function(self,w,h)
             gDuel.vgui.DrawOutlinedBox( 0, 0, w, h )
-            gDuel.vgui.DrawBox(0, 0, w , h, Color(167, 48, 48, 100))
+            gDuel.vgui.DrawBox(0, 0, w , h, Color(10, 189, 227, 100))
             draw.SimpleText( "Main", 'gDuelFont18', 34, 6, Color(255,255,255,200))
       end
       MainButton.OnCursorEntered = function()
@@ -274,7 +273,7 @@ local function gDuelMenu()
       end
       LeadersButton.Paint = function(self,w,h)
             gDuel.vgui.DrawOutlinedBox( 0, 0, w, h )
-            gDuel.vgui.DrawBox(0, 0, w , h, Color(167, 48, 48, 100))
+            gDuel.vgui.DrawBox(0, 0, w , h, Color(10, 189, 227, 100))
             draw.SimpleText( "Leaderboard", 'gDuelFont18', 8, 6, Color(255,255,255,200))
       end
       LeadersButton.OnCursorEntered = function()
@@ -294,7 +293,7 @@ local function gDuelMenu()
       end
       CloseButton.Paint = function(self,w,h)
             gDuel.vgui.DrawOutlinedBox( 0, 0, w, h )
-            gDuel.vgui.DrawBox(0, 0, w , h, Color(167, 48, 48, 100))
+            gDuel.vgui.DrawBox(0, 0, w , h, Color(10, 189, 227, 100))
             draw.SimpleText( "Close", 'gDuelFont18', 34, 6, Color(255,255,255,200))
       end
       CloseButton.OnCursorEntered = function()
@@ -394,7 +393,7 @@ net.Receive('gDuel.SendRequest', function()
             btn:SetTextColor(color_white)
             btn.DoClick = data.func
             btn.Paint = function(self,w,h)
-                  gDuel.vgui.DrawBox(0, 0, w , h, Color(167, 48, 48, 100))
+                  gDuel.vgui.DrawBox(0, 0, w , h, Color(10, 189, 227, 100))
                   gDuel.vgui.DrawOutlinedBox( 0, 0,w, h )          
             end
             cury = cury + h
