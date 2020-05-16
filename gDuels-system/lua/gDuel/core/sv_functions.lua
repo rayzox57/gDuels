@@ -292,6 +292,13 @@ hook.Add("PlayerDisconnected", "gDuels.OnPlayerDisconnected", function(ply)
 	end
 end)
 
+hook.Add("PlayerShouldTakeDamage","DuelBlockDamage",function(ply1,ply2)
+	if ( ply1.Opponent != nil ) then
+		return ply1.Opponent == ply2
+	elseif ( ply2:IsPlayer() and ply2~=ply1 and ply2.Opponent != nil ) then
+		return ply2.Opponent == ply1 or ply1.Opponent==ply2
+	end
+end)
 
 hook.Add( "playerCanChangeTeam", "gDuels.CanChange", function( ply,  team,  force)
     if ply.Opponent != nil then
