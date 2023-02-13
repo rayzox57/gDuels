@@ -52,8 +52,57 @@ gDuel.Language["eng"] = {
 	["RemoveAllPoints"] = "You already have duel points, in order to add a new points remove all old data",
 	["UnavailableWager"] = "Enter a wager!",
 	["PointNotFound"] = "Please setup duel points!",
-	["EnemyInDuel"] = "Your enemy is already in the duel!"
+	["EnemyInDuel"] = "Your enemy is already in the duel!",
+	["CantDuelYourself"] = "You can't duel Yourself",
+	["CantDuelInBuildMode"] = "You can't launch duel in BuildMode",
+	["CantDuelEnemyInBuildMode"] = "You can't launch duel with enemy in BuildMode"
+}
 
+gDuel.Language["fra"] = {
+	["Small amount"] = "Votre montant de pari est inférieur au pari minimum !",
+	["Big amount"] = "Votre montant de pari est plus élevé que le pari maximum !",
+	["GameWithYourself"] = "Vous ne pouvez pas jouer avec vous-même !",
+	["CantAfford"] = "Vous ne pouvez pas vous permettre ça !",
+	["CantAffordEnemy"] = "Votre ennemi ne peut pas se permettre cela!",
+	["Declined"] = "Vous avez refusé la demande avec succès !",
+	["DeclinedEnemy"] = "Votre ennemi a refusé la demande !",
+	["Accepted"] = "Vous avez accepté une demande pour un duel !",
+	["AcceptedEnemy"] = "Votre ennemi a accepté une demande pour un duel !",
+	["FirstPoint"] = "Premier point défini, définissez maintenant un autre avec le bouton droit de la souris !",
+	["SecondPoint"] = "Deuxième point défini ! Vous pouvez maintenant le refaire pour en définir d'autres!",
+	["DuelToolName"] = "Configuration de points de duel",
+	["DuelToolNameGlobal"] = "Outil de configuration de points de duel",
+	["DuelToolDesc"] = "Clique gauche : définir le point du premier joueur. Clique droit : définir le point du deuxième joueur. R : effacer toutes les positions",
+	["DuelTool0"] = " Appuyez sur R pour effacer tous les points.",
+	["DuelToolSetFirstPoint"] = "Vous ne pouvez pas définir deuxième point sans définir le premier point!",
+	["Youwin!"] = "Vous avez gagné!",
+	["YouLose!"] = "Vous avez perdu!",
+	["YouDontHaveRights!"] = "Vous n'avez pas le droit de le faire!",
+	["GO"] = "GO!",
+	["EnterBetVgui"] = "Entrez une mise (plus grand que ",
+	["EnterBetVgui2"] = " et moins que ",
+	["SendChallenge"] = "Envoyer le défi!",
+	["SearchaPlayer"] = "Rechercher un joueur...",
+	["Selected"] = "Sélectionné",
+	["Select"] = "Sélectionnez",
+	["Description"] = "Description: ",
+	["AcceptVgui"] = " vous a défié pour",
+	["AcceptVgui2"] = " avec une mise de ",
+	["AcceptVgui3"] = "Oui. Duel ce nerd",
+	["AcceptVgui4"] = "Non",
+	["PointsCleared"] = "Vous avez effacé avec succès tous les points!",
+	["DuelToolSetFirstPointalready"] = "Le premier point est déjà défini",
+	["Name"] = "Nom: ",
+	["Money"] = "Argent: ",
+	["AlreadySended"] = "Vous avez déjà envoyé une demande ou le joueur est déjà en duel",
+	["OnTheDuel"] = "Vous ne pouvez pas changer de travail pendant un duel!",
+	["RemoveAllPoints"] = "Vous avez déjà des points de duel, pour ajouter de nouveaux points, supprimez toutes les anciennes données",
+	["UnavailableWager"] = "Entrez une mise!",
+	["PointNotFound"] = "Veuillez configurer les points de duel!",
+	["EnemyInDuel"] = "Votre ennemi est déjà en duel!",
+	["CantDuelYourself"] = "Vous ne pouvez pas vous affronter",
+	["CantDuelInBuildMode"] = "Vous ne pouvez pas lancer un duel en BuildMode",
+	["CantDuelEnemyInBuildMode"] = "Vous ne pouvez pas lancer un duel avec un ennemi en BuildMode"
 }
 
 gDuel.Language["rus"] = {
@@ -97,7 +146,10 @@ gDuel.Language["rus"] = {
 	["RemoveAllPoints"] = "У вас уже есть установленные точки дуэлей, чтобы добавить новые очистите сохранённые позиции",
 	["UnavailableWager"] = "Введите ставку!",
 	["PointNotFound"] = "Пожалуйста настройте точки дуэли!",
-	["EnemyInDuel"] = "Ваш оппонент уже находится в дуэли!"
+	["EnemyInDuel"] = "Ваш оппонент уже находится в дуэли!",
+	["CantDuelYourself"] = "Вы не можете сражаться с самим собой!",
+	["CantDuelInBuildMode"] = "Вы не можете вызвать на дуэль в режиме постройки!",
+	["CantDuelEnemyInBuildMode"] = "Вы не можете вызвать на дуэль игрока находящегося в режиме постройки!"
 
 }
 
