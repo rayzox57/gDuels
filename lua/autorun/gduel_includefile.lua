@@ -38,5 +38,5 @@ end
 
 local _, cSS = gDuel.Money.sys()
 if SERVER then
-	MsgC( Color(0,125,255,255), "[gDuel-System]", Color(255,255,255,255), ": Currency system is ", Color(0,255,0,255), cSS, Color(255,255,255,255), " ." )
+	MsgC( Color(0,125,255,255), "[gDuel-System]", Color(255,255,255,255), ": Currency system is ", Color(0,255,0,255), cSS, Color(255,255,255,255), ".\n" )
 end
