@@ -2,9 +2,21 @@
 	Created by DidVaitel (http://steamcommunity.com/profiles/76561198108670811)
 ]]
 
-gDuel.maxBet 		= 1000000 -- max bet [DARKRP ONLY]
-gDuel.minBet 		= 500 -- min bet [DARKRP ONLY]
-gDuel.Lang = "eng" -- rus,eng
+
+-- Currency : Warning for moment, this feature doesn't has full check if the currency is installed on the server, so if you use a currency that isn't installed on the server, it will causes error! !.
+gDuel.currency = "DRP" -- DRP = DarkRP / PS1 = Pointshop 1 / PS2 = Pointshop 2 / PPS2 = Pointshop 2 Premium / PS1 = Pointshop 1 / SH_PS = SH Pointshop / ZPN = Zero´s PumpkinNight 🎃 🎄 (Halloween / Christmas Script) / FREE = No Currency
+
+gDuel.maxBet 		= 1000000 -- max bet
+gDuel.minBet 		= 500     -- min bet
+gDuel.Lang = "fra"            -- rus,eng,fra
+
+
+
+-- Builder-X Support (https://www.gmodstore.com/market/view/builder-x) [ for moment, no Builder-X check ]
+gDuel.builderX_Support = true
+-- end of Builder-X Support
+
+
 
 gDuel.Types		= {
 	//{
