@@ -165,7 +165,7 @@ local function gDuelMenu()
         pnl.desc = pnl:Add'DLabel'
         pnl.desc:SetSize(pnl:GetWide() - 10, pnl:GetTall() - 75)
         pnl.desc:SetPos(5, 25)
-        pnl.desc:SetText(gDuel.Translate("Description") .. "" .. data.desc)
+        pnl.desc:SetText(gDuel.Translate("Description") .. "" ..  ( gDuel.Translate(data.desc) or gDuel.Translate("NoDescription") ))
         pnl.desc:SetAutoStretchVertical(true)
         pnl.desc:SetWrap(true)
         pnl.desc:SetFont'gDuelFont14'

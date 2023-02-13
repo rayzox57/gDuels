@@ -21,7 +21,7 @@ gDuel.builderX_Support = false
 gDuel.Types		= {
 	//{
 	//	name 			= 'Explosionz', -- Name in Types
-	//	desc 			= 'Spawn with 999 nades, and fuck up the opponent with em!', -- desc
+	//	desc 			= 'Explosionz', -- desc (this desc must be the name of translation in lang file [exemple : ['Explosionz'] = 'description' ] )
 	//	weapon 		= 'weapon_frag', -- Weapon
 	//	onSpawn 		= function(pl)
 	//		pl:GiveAmmo(999, 'Grenade') - What we will give player on spawn
@@ -29,12 +29,12 @@ gDuel.Types		= {
 	//},
 	{
 		name 			= 'Kinky Crowbar',
-		desc 			= 'You have kinky crowbar sex with the opponent',
+		desc 			= 'Kinky Crowbar',
 		weapon 		= 'weapon_crowbar'
 	},
 	{
 		name 			= 'Fisting',
-		desc 			= 'You both spawn with 50 hp and have to fist eachother to death xd',
+		desc 			= 'Fisting',
 		weapon 		= 'weapon_fists',
 		onSpawn 		= function(pl)
 			pl:SetHealth(50)
@@ -42,7 +42,7 @@ gDuel.Types		= {
 	},
 	{
 		name 			= 'Explosionz',
-		desc 			= 'Spawn with 999 nades, and fuck up the opponent with em!',
+		desc 			= 'Explosionz',
 		weapon 		= 'weapon_frag',
 		onSpawn 		= function(pl)
 			pl:GiveAmmo(999, 'Grenade')

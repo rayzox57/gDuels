@@ -55,7 +55,16 @@ gDuel.Language["eng"] = {
 	["EnemyInDuel"] = "Your enemy is already in the duel!",
 	["CantDuelYourself"] = "You can't duel Yourself",
 	["CantDuelInBuildMode"] = "You can't launch duel in BuildMode",
-	["CantDuelEnemyInBuildMode"] = "You can't launch duel with enemy in BuildMode"
+	["CantDuelEnemyInBuildMode"] = "You can't launch duel with enemy in BuildMode",
+	["NoDescription"] = "No Description",
+
+
+	// Add here all duel modes descriptions 
+	["Kinky Crowbar"] = "You have kinky crowbar sex with the opponent",
+	["Fisting"] = "You both spawn with 50 hp and have to fist eachother to death xd",
+	["Explosionz"] = "Spawn with 999 nades, and fuck up the opponent with em!"
+
+
 }
 
 gDuel.Language["fra"] = {
@@ -102,7 +111,14 @@ gDuel.Language["fra"] = {
 	["EnemyInDuel"] = "Votre ennemi est déjà en duel!",
 	["CantDuelYourself"] = "Vous ne pouvez pas vous affronter",
 	["CantDuelInBuildMode"] = "Vous ne pouvez pas lancer un duel en BuildMode",
-	["CantDuelEnemyInBuildMode"] = "Vous ne pouvez pas lancer un duel avec un ennemi en BuildMode"
+	["CantDuelEnemyInBuildMode"] = "Vous ne pouvez pas lancer un duel avec un ennemi en BuildMode",
+	["NoDescription"] = "Aucune description",
+
+	// Ajouter ici toutes les descriptions pour vos modes de duel
+	["Kinky Crowbar"] = "Vous avez des relations sexuelles coquines avec l'adversaire",
+	["Fisting"] = "Vous apparaissez tous les deux avec 50 points de vie et vous devez vous fister à mort xd",
+	["Explosionz"] = "Spawn avec 999 nades, et nique l'adversaire avec !"
+
 }
 
 gDuel.Language["rus"] = {
@@ -149,7 +165,15 @@ gDuel.Language["rus"] = {
 	["EnemyInDuel"] = "Ваш оппонент уже находится в дуэли!",
 	["CantDuelYourself"] = "Вы не можете сражаться с самим собой!",
 	["CantDuelInBuildMode"] = "Вы не можете вызвать на дуэль в режиме постройки!",
-	["CantDuelEnemyInBuildMode"] = "Вы не можете вызвать на дуэль игрока находящегося в режиме постройки!"
+	["CantDuelEnemyInBuildMode"] = "Вы не можете вызвать на дуэль игрока находящегося в режиме постройки!",
+	["NoDescription"] = "Нет описания",
+
+	// Добавляем сюда описания всех режимов дуэли
+	["Kinky Crowbar"] = "У вас странный ломовый секс с противником",
+	["Fisting"] = "Вы оба появляетесь с 50 хп и должны драть друг друга до смерти xd",
+	["Explosionz"] = "Появитесь с 999 гранатами и испортите ими противника!"
+
+
 
 }
 
