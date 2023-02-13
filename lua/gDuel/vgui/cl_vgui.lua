@@ -169,7 +169,7 @@ local function gDuelMenu()
         pnl.desc:SetAutoStretchVertical(true)
         pnl.desc:SetWrap(true)
         pnl.desc:SetFont'gDuelFont14'
-        pnl.desc:SetTextColor(color_white)
+        pnl.desc:SetTextColor(Color(200,200,200,255))
 
         pnl.select = GuiButton(gDuel.Translate("Select"), pnl, 5, pnl:GetTall() - 22, pnl:GetWide() - 10, 17, function(self)
             selectedDuel = _
@@ -220,8 +220,13 @@ local function gDuelMenu()
             gDuel.vgui.DrawBox(0, 0, w, h, Color(20, 20, 20, 100))
             gDuel.vgui.DrawOutlinedBox(0, 0, w, h)
             gDuel.vgui.txt(gDuel.Translate("Name") .. '' .. v.Name, 15, 55, 0)
-            gDuel.vgui.txt('Wins: ' .. v.Duelswin, 15, 55, 15)
-            gDuel.vgui.txt('Loses: ' .. v.Duelslose, 15, 55, 28)
+
+            local wins = gDuel.Translate("Win" .. (v.Duelswin == 1 and '' or 's'))
+            local loses = gDuel.Translate("Lose" .. (v.Duelslose == 1 and '' or 's'))
+
+
+            gDuel.vgui.txt( wins .. ': ' .. v.Duelswin, 15, 55, 15)
+            gDuel.vgui.txt( loses .. ': ' .. v.Duelslose, 15, 55, 28)
         end
 
         plList2:AddItem(pnl)
@@ -246,7 +251,13 @@ local function gDuelMenu()
     MainButton.Paint = function(self, w, h)
         gDuel.vgui.DrawOutlinedBox(0, 0, w, h)
         gDuel.vgui.DrawBox(0, 0, w, h, Color(10, 189, 227, 100))
-        draw.SimpleText("Main", 'gDuelFont18', 34, 6, Color(255, 255, 255, 200))
+
+        local mainMenu = gDuel.Translate("MainMenu")
+        surface.SetFont("gDuelFont18")
+        local mainMenuWidth,_ = surface.GetTextSize(mainMenu)
+        local x = w / 2 - (mainMenuWidth / 2)
+
+        draw.SimpleText(mainMenu, 'gDuelFont18', x, 6, Color(255, 255, 255, 200))
     end
 
     MainButton.OnCursorEntered = function()
@@ -268,7 +279,13 @@ local function gDuelMenu()
     LeadersButton.Paint = function(self, w, h)
         gDuel.vgui.DrawOutlinedBox(0, 0, w, h)
         gDuel.vgui.DrawBox(0, 0, w, h, Color(10, 189, 227, 100))
-        draw.SimpleText("Leaderboard", 'gDuelFont18', 8, 6, Color(255, 255, 255, 200))
+
+        local leaderBoard = gDuel.Translate("LeaderBoard")
+        surface.SetFont("gDuelFont18")
+        local leaderBoardWidth,_ = surface.GetTextSize(leaderBoard)
+        local x = w / 2 - (leaderBoardWidth / 2)
+
+        draw.SimpleText(leaderBoard, 'gDuelFont18', x, 6, Color(255, 255, 255, 200))
     end
 
     LeadersButton.OnCursorEntered = function()
@@ -292,7 +309,13 @@ local function gDuelMenu()
     CloseButton.Paint = function(self, w, h)
         gDuel.vgui.DrawOutlinedBox(0, 0, w, h)
         gDuel.vgui.DrawBox(0, 0, w, h, Color(10, 189, 227, 100))
-        draw.SimpleText("Close", 'gDuelFont18', 34, 6, Color(255, 255, 255, 200))
+
+        local close = gDuel.Translate("Close")
+        surface.SetFont("gDuelFont18")
+        local closeWidth,_ = surface.GetTextSize(close)
+        local x = w / 2 - (closeWidth / 2)
+
+        draw.SimpleText(close, 'gDuelFont18', x, 6, Color(255, 255, 255, 200))
     end
 
     CloseButton.OnCursorEntered = function()
@@ -381,7 +404,7 @@ net.Receive('gDuel.SendRequest', function()
         btn:SetSize(520, h)
         btn:SetPos(0, cury)
         btn:SetText(data.str)
-        btn:SetTextColor(color_white)
+        btn:SetTextColor(Color(255,255,255,255))
         btn.DoClick = data.func
 
         btn.Paint = function(self, w, h)

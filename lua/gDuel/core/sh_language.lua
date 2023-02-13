@@ -12,6 +12,18 @@ gDuel.Language = {}
 // P.S if you want to add new translation copy english table
 
 gDuel.Language["eng"] = {
+
+	["DuelNPC"] = "Duel NPC",
+
+	["MainMenu"] = "Main",
+	["LeaderBoard"] = "LeaderBoard",
+	["Close"] = "Close",
+	
+	["Win"]  = "Wins",
+	["Wins"] = "Wins",
+	["Lose"] = "Loses",
+	["Loses"] = "Loses",
+
 	["Small amount"] = "Your bet amount is smaller than minimum bet!",
 	["Big amount"] = "Your bet amount is bigger than maximum bet!",
 	["GameWithYourself"] = "You can't play with yourself!",
@@ -68,6 +80,18 @@ gDuel.Language["eng"] = {
 }
 
 gDuel.Language["fra"] = {
+
+	["DuelNPC"] = "PNJ Duel",
+
+	["MainMenu"] = "Accueil",
+	["LeaderBoard"] = "Classement",
+	["Close"] = "Fermer",
+	
+	["Win"]  = "Partie Gagnée",
+	["Wins"] = "Parties Gagnées",
+	["Lose"] = "Partie Perdue",
+	["Loses"] = "Parties Perdues",
+
 	["Small amount"] = "Votre montant de pari est inférieur au pari minimum !",
 	["Big amount"] = "Votre montant de pari est plus élevé que le pari maximum !",
 	["GameWithYourself"] = "Vous ne pouvez pas jouer avec vous-même !",
@@ -93,7 +117,7 @@ gDuel.Language["fra"] = {
 	["SendChallenge"] = "Envoyer le défi!",
 	["SearchaPlayer"] = "Rechercher un joueur...",
 	["Selected"] = "Sélectionné",
-	["Select"] = "Sélectionnez",
+	["Select"] = "Sélectionner",
 	["Description"] = "Description: ",
 	["AcceptVgui"] = " vous a défié pour",
 	["AcceptVgui2"] = " avec une mise de ",
@@ -122,6 +146,18 @@ gDuel.Language["fra"] = {
 }
 
 gDuel.Language["rus"] = {
+
+	["DuelNPC"] = "Дуэль NPC",
+
+	["ГлавноеМеню"] = "Дом",
+	["LeaderBoard"] = "Таблица лидеров",
+	["Закрыть"] = "Закрыть",
+	
+	["Победа"] = "Игра выиграна",
+	["Победы"] = "Выигранные игры",
+	["Проигрыш"] = "Проигранная игра",
+	["Проигрыши"] = "Проигранные игры",
+	
 	["Small amount"] = "Ваша ставка меньше чем минимальная допустимая ставка!",
 	["Big amount"] = "Ваша ставка больше чем максимальная допустимая ставка!",
 	["GameWithYourself"] = "Ты не можешь вызвать самого себя на дуэль!",

@@ -46,14 +46,16 @@ function ENT:Draw()
 
     Angles:RotateAroundAxis( Angles:Right(), math.sin(CurTime() * math.pi) * -45 )
 
+    local duelNPC = gDuel.Translate("DuelNPC")
+
     cam.Start3D2D( position + vectors + Angles:Right() * 1.2, Angles, 0.065 )
-        draw.SimpleTextOutlined( "Duel NPC", "gDuelFont100", -3, 0, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+        draw.SimpleTextOutlined( duelNPC, "gDuelFont100", -3, 0, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
     cam.End3D2D()
 
     Angles:RotateAroundAxis( Angles:Right(), 180 )
 
     cam.Start3D2D( position + vectors + Angles:Right() * 1.2, Angles, 0.065 )
-        draw.SimpleTextOutlined( "Duel NPC", "gDuelFont100", -3, 0, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
+        draw.SimpleTextOutlined( duelNPC, "gDuelFont100", -3, 0, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0, 255))
     cam.End3D2D()
 
 end

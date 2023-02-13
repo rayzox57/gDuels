@@ -120,7 +120,7 @@ end
 
 function PANEL:Paint( w, h )
 	gDuel.vgui.DrawOutlinedBox(0, 0, w, h)
-	self:DrawTextEntryText(color_white, Color( 150, 150, 150, 150 ), color_white )
+	self:DrawTextEntryText(Color(255,255,255,255), Color( 150, 150, 150, 150 ), Color(255,255,255,255) )
 end
 
 vgui.Register('gTxtEntry', PANEL, 'DTextEntry')
