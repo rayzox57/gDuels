@@ -8,8 +8,6 @@
 gDuel = gDuel or {}
 
 if SERVER then
-
-
 	local files, directories = file.Find( "gDuel/*", "LUA" )
 	for i, folder in pairs( directories ) do
 		local files, directories = file.Find( "gDuel/" .. folder .. "/*", "LUA" )
@@ -36,4 +34,9 @@ else
 			end
 		end
 	end
+end
+
+local _, cSS = gDuel.Money.sys()
+if SERVER then
+	msgC( Color(0,125,255,255), "[gDuel-System]", Color(255,255,255,255), ": Currency system is ", Color(0,255,0,255), cSS, Color(255,255,255,255), " ." )
 end
