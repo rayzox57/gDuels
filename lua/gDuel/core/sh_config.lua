@@ -13,7 +13,7 @@ gDuel.Lang = "eng"            -- rus,eng,fra
 
 
 -- Builder-X Support (https://www.gmodstore.com/market/view/builder-x) [ for moment, no Builder-X check ]
-gDuel.builderX_Support = true
+gDuel.builderX_Support = false
 -- end of Builder-X Support
 
 
