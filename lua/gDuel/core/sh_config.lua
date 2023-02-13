@@ -8,7 +8,7 @@ gDuel.currency = "DRP" -- DRP = DarkRP / PS1 = Pointshop 1 / PS2 = Pointshop 2 /
 
 gDuel.maxBet 		= 1000000 -- max bet
 gDuel.minBet 		= 500     -- min bet
-gDuel.Lang = "fra"            -- rus,eng,fra
+gDuel.Lang = "eng"            -- rus,eng,fra
 
 
 
